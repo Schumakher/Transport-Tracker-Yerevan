@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Transport Tracker Yerevan</string>
+    <string name="google_api_key">AIzaSyCVOPp7zfPr18wlCH4RBP00j65nYPCYDVs</string>
+
+    <string name="error_bus_location">Bus location does not available now. Please check back a moment later.</string>
+    <string name="error_my_location">Your location does not available now. Please check location settings.</string>
+    <string name="error_network">Please check Your internet connection.</string>
+</resources>
