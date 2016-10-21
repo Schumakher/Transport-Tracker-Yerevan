@@ -108,6 +108,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
         }
         mGoogleMap.setMyLocationEnabled(true);
+        mGoogleMap.getUiSettings().setZoomControlsEnabled(true);
+
+        mGoogleMap.getUiSettings().setIndoorLevelPickerEnabled(false);
+        mGoogleMap.getUiSettings().setRotateGesturesEnabled(false);
+        mGoogleMap.getUiSettings().setCompassEnabled(false);
+        mGoogleMap.getUiSettings().setMapToolbarEnabled(false);
 
         processSpinner();
     }
@@ -278,7 +284,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onTick(long millisUntilFinished) {
                 Log.i("TAG", "Timer tick");
 
-                clearParam = 1;
                 getJasonParams();
 
                 //tuneBusMarker();
@@ -286,17 +291,28 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 mGoogleMap.clear();
                 //mGoogleMap.addMarker(markerOptions);
                 try {
-                    addBusMarker();
-                } catch (Exception e){
-                    ConnectivityManager cm =
-                            (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
-                    if (cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected()) {
-                        Toast toast = Toast.makeText(getBaseContext(), R.string.error_bus_location, Toast.LENGTH_LONG);
-                        toast.show();
+                    if (busNumberValue != null && busLatLng != null) {
+                        addBusMarker();
+                        clearParam = 1;
 
-                        mGoogleMap.clear();
+                    } else {
+
+                        ConnectivityManager cm =
+                                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+                        if (cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected()) {
+                            Toast toast = Toast.makeText(getBaseContext(), R.string.error_bus_location, Toast.LENGTH_LONG);
+                            toast.show();
+
+                            mGoogleMap.clear();
+                        }
                     }
+
+                } catch (Exception e){
+
+                    Toast toast = Toast.makeText(getBaseContext(), "Something get wrong...", Toast.LENGTH_LONG);
+                    toast.show();
                 };
             }
 
