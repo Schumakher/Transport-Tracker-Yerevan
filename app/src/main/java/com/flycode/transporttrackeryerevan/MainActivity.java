@@ -23,6 +23,7 @@ import com.flycode.transporttrackeryerevan.api.APIBuilder;
 import com.flycode.transporttrackeryerevan.api.APIService;
 import com.flycode.transporttrackeryerevan.model.ItemBus;
 import com.flycode.transporttrackeryerevan.response.BusesListResponse;
+import com.flycode.transporttrackeryerevan.util.DeviceUtil;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -271,8 +272,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }*/
 
     private void addBusMarker(){
+        int contentRightPadding = (int) DeviceUtil.getPxForDp(this, 20);
+
         IconGenerator iconFactory = new IconGenerator(getBaseContext());
         iconFactory.setBackground(getResources().getDrawable(R.drawable.bus));
+        if (busRotationAzimuth == 0) {
+            busRotationAzimuth = 90;
+            iconFactory.setContentPadding(0 , 0 , contentRightPadding, 0);
+        }
+        iconFactory.setContentRotation(-(int) Math.round(busRotationAzimuth));
         iconFactory.setRotation((int) Math.round(busRotationAzimuth));
         addIcon(iconFactory, busNumberValue, busLatLng);
     }
