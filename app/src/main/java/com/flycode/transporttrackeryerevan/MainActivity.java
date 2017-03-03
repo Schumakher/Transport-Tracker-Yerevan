@@ -2,6 +2,7 @@ package com.flycode.transporttrackeryerevan;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.ConnectivityManager;
@@ -54,6 +55,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private String busNumberValue;
     private int clearParam = 0;
 
+    private Toast infoToast;
+
     private static final String MAP_TYPES[] = {"Normal", "Hybrid", "Satellite", "Terrain"};
 
     @Override
@@ -75,7 +78,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     .addApi(LocationServices.API)
                     .build();
         }
-//_____onCreate________
+
+        Intent titleIntent = getIntent();
+        String busNumbers[] = titleIntent.getStringArrayExtra("BUS_NUMBERS_LIST");
+        int clickPosition = titleIntent.getIntExtra("CLICK_POSITION", 0);
+        setTitle(busNumbers[clickPosition]);
     }
 
     @Override
@@ -150,8 +157,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         try {
             mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
         } catch (Exception e) {
-            Toast toast = Toast.makeText(getBaseContext(), R.string.error_my_location, Toast.LENGTH_LONG);
-            toast.show();
+//            infoToast = Toast.makeText(getBaseContext(), R.string.error_my_location, Toast.LENGTH_LONG);
+//            infoToast.show();
+            Log.i("TAGG", getResources().getString(R.string.error_my_location));
         };
 
         updateMarkerPosition();
@@ -247,16 +255,18 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onFailure(Call<BusesListResponse> call, Throwable t) {
                 Log.i("TAG", "onFailure");
                 if (!isOnline()) {
-                    Toast toast = Toast.makeText(getBaseContext(), R.string.error_network, Toast.LENGTH_LONG);
-                    toast.show();
+//                    infoToast = Toast.makeText(getBaseContext(), R.string.error_network, Toast.LENGTH_LONG);
+//                    infoToast.show();
+                    Log.i("TAGG", getResources().getString(R.string.error_network));
                     if (clearParam == 1) {
                         mGoogleMap.clear();
                     }
 
                 } else {
                     if (clearParam ==1) {
-                        Toast toast = Toast.makeText(getBaseContext(), R.string.error_bus_location, Toast.LENGTH_LONG);
-                        toast.show();
+//                        infoToast = Toast.makeText(getBaseContext(), R.string.error_bus_location, Toast.LENGTH_LONG);
+//                        infoToast.show();
+                        Log.i("TAGG", getResources().getString(R.string.error_bus_location));
                         mGoogleMap.clear();
                     }
                 }
@@ -310,8 +320,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
                         if (cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected()) {
-                            Toast toast = Toast.makeText(getBaseContext(), R.string.error_bus_location, Toast.LENGTH_LONG);
-                            toast.show();
+//                            infoToast = Toast.makeText(getBaseContext(), R.string.error_bus_location, Toast.LENGTH_LONG);
+//                            infoToast.show();
+                            Log.i("TAGG", getResources().getString(R.string.error_bus_location));
 
                             mGoogleMap.clear();
                         }
@@ -319,8 +330,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 } catch (Exception e){
 
-                    Toast toast = Toast.makeText(getBaseContext(), "Something get wrong...", Toast.LENGTH_LONG);
-                    toast.show();
+//                    infoToast = Toast.makeText(getBaseContext(), "Something get wrong...", Toast.LENGTH_LONG);
+//                    infoToast.show();
+                    Log.i("TAGG", "Something get wrong...");
                 };
             }
 
@@ -347,6 +359,4 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
-
-
 }
