@@ -163,6 +163,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         };
 
         updateMarkerPosition();
+
+        try {
+            mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(busLatLng, 16));
+        } catch (Exception e) {
+//            infoToast = Toast.makeText(getBaseContext(), R.string.error_bus_location, Toast.LENGTH_LONG);
+//            infoToast.show();
+            Log.i("TAGG", getResources().getString(R.string.error_bus_location));
+        };
     }
 
     @Override
